@@ -70,7 +70,8 @@ This repository contains the full experimental code for the paper that proposes 
     ├── scenario_comparison.csv
     ├── sensitivity_analysis.csv
     ├── subgroup_analysis.csv
-    └── method_comparison.csv
+    ├── method_comparison.csv
+    └── case_analysis_tables_8_9_10.csv
 ```
 
 ## Getting Started
