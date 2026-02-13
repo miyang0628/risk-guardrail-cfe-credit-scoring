@@ -1,0 +1,5 @@
+Subgroup,N,Sample_Success,RR(%),Reliable_RR(%),Avg_Features_Changed,Difficulty
+Q1 (Low),293,2,0.68,0.34,1.62,Very High
+Q2,322,8,2.48,0.93,1.97,Very High
+Q3,288,44,15.28,7.1,2.02,High
+Q4 (High),255,74,29.02,17.04,1.98,Moderate

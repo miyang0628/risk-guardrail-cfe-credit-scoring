@@ -1,0 +1,5 @@
+Scenario,Method,N,Sample_Success,RR(%),Success_Paths,VR(%),Causal_VR(%),Reliable_RR(%),Avg_Features_Changed,Errors
+Scenario_A,random,1158,1158,100.0,4632,94.11,11.49,5.22,2.77,0
+Scenario_C,random,1158,128,11.05,503,0.0,46.92,5.87,1.99,1030
+Scenario_A,kdtree,1158,1158,100.0,4632,100.0,18.57,0.0,15.93,0
+Scenario_C,kdtree,1158,0,0.0,0,0.0,0.0,0.0,0.0,1158
