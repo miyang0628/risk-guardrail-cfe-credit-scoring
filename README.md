@@ -144,19 +144,6 @@ Part 8: Algorithm Robustness Validation
 | DiCE | 0.11 |
 | Optuna | 3.x |
 | Random Seed | 42 |
-
-## Citation
-
-If you find this work useful, please cite:
-
-```bibtex
-@article{yang2026risk_guardrail,
-  title={Counterfactual Explanation (CFE)-Based Risk Guardrail Design
-         for Adverse Selection Prevention and Consumer Protection
-         in AI Credit Scoring Models},
-  author={Yang, Mun-Il},
-  year={2026}
-}
 ```
 
 ## License
