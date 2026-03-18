@@ -1,0 +1,7 @@
+Metric,Value
+Accuracy,0.7550
+AUC-ROC,0.7881
+F1-Score,0.8304
+Precision,0.8054
+Recall,0.8571
+5-Fold CV AUC (Train),0.8013
