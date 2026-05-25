@@ -1,5 +1,0 @@
-Subgroup,N,Avg_Duration(mo),Sample_Success,RR(%),Reliable_RR(%),Avg_Features_Changed
-"Q1 (Short, ≤18mo)",16,15.0,14,87.5,81.25,1.93
-Q2 (18~24mo),14,24.0,12,85.71,75.0,2.1
-Q3 (24~36mo),14,34.3,9,64.29,50.0,2.14
-"Q4 (Long, >36mo)",7,48.0,2,28.57,28.57,1.75

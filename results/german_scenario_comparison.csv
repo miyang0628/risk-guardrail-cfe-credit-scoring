@@ -1,4 +1,0 @@
-Scenario,N_Samples,Sample_Success,RR(%),Total_Paths_Generated,Success_Paths,Imm_Violation_Paths,VR(%),Cau_Violation_Paths,Causal_VR(%),Reliable_RR(%),Avg_Features_Changed
-Scenario_A,51,51,100.0,204,204,50,24.51,1,0.49,75.12,1.87
-Scenario_B,51,51,100.0,204,204,0,0.0,0,0.0,100.0,1.8
-Scenario_C,51,37,72.55,148,148,0,0.0,18,12.16,63.73,2.03
