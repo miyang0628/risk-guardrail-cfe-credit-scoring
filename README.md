@@ -1,91 +1,83 @@
 # Risk Guardrails for Counterfactual Explanations in AI Credit Scoring
 
-> **Counterfactual Explanation (CFE)-Based Risk Guardrail Design for Adverse Selection Prevention and Consumer Protection in AI Credit Scoring Models**
-
 ## Overview
 
-This repository contains the full experimental code for the paper that proposes a **three-stage AI governance framework** to ensure accountability and financial stability in AI credit scoring systems. The framework prevents adverse selection and gaming risks by embedding risk guardrails directly into the counterfactual explanation generation process.
+This repository contains the full experimental code for the paper:
 
-Primary experiments are conducted on the **FICO HELOC** dataset. Cross-dataset transferability is validated on the **UCI German Credit** dataset, confirming that the guardrail architecture transfers across lending domains without structural modification.
+> **"Designing Counterfactual Explanation-Based Risk Guardrails for Adverse Selection Prevention and Consumer Protection in AI Credit Scoring Models"**
+> *Submitted for double-blind peer review. Author information withheld.*
 
-### Key Contributions
+This study designs and empirically validates a three-stage credit risk guardrail framework—comprising feature governance, constraint-embedded CFE optimization, and operational monitoring—to reduce adverse selection risk in AI-driven credit markets. The framework operationalizes three financial risk constraints (immutability, logical consistency, and action cost bounds) within XGBoost-based credit scoring models.
 
-- **Extended Reliable Recourse Rate**: `Reliable RR = RR × (1 − VR) × (1 − Causal VR)` — a multi-layered metric that captures both immutability violations and causal inconsistencies
-- **Three-stage guardrail architecture**: Immutability (Ω_imm) → Causality (Ω_cau) → Actionability (Ω_act) with hierarchical priority enforcement
-- **Large-scale simulation**: 1,158 rejected borrowers × 4 paths = 4,632+ counterfactual paths analyzed (HELOC)
-- **Cross-dataset transferability validation**: Full three-scenario replication on UCI German Credit (N = 1,000)
-- **Algorithm robustness validation**: Random vs KD-Tree comparison confirming algorithm-independent guardrail protection across both datasets
+Primary experiments are conducted on the **FICO HELOC** dataset. Cross-dataset consistency of core guardrail properties is validated on the **UCI German Credit** dataset.
 
 ---
 
-## Results Summary
+## Key Contributions
 
-### Guardrail Performance — FICO HELOC (Primary)
+- **Two-level metric framework**: Pathway Reliable Recourse Rate and Borrower Reliable Recourse Rate — resolving the denominator inconsistency of prior single-composite formulations
+- **Three-stage guardrail architecture**: Immutability (Ω_imm) → Logical Consistency (Ω_cau) → Action Cost (Ω_act) with hierarchical priority enforcement (Hard > Functional > Soft)
+- **Bootstrap robustness**: Full pipeline replicated across 5 random seeds ({42, 123, 456, 789, 2024}) with 95% confidence intervals
+- **Cross-dataset validation**: Core guardrail properties confirmed on UCI German Credit without architectural modification
 
-| Scenario | RR (%) | VR (%) | Causal VR (%) | Reliable RR (%) | Avg Features Changed |
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| **A** (No constraints) | 100.00 | 94.11 | 11.49 | 5.22 | 2.77 |
-| **B** (Immutability only) | 36.87 | 0.00 | 28.22 | 26.47 | 3.27 |
-| **C** (Full guardrails) | 11.05 | 0.00 | 46.92 | 5.87 | 1.99 |
+---
 
-> Without guardrails, **94.11%** of generated paths manipulate immutable variables. A single immutability constraint reduces this to **0.00%**, improving recourse quality by **5.1×**.
+## Main Results
 
-### Guardrail Performance — UCI German Credit (Transferability Validation)
+### FICO HELOC — Primary Results (seed = 42)
 
-| Scenario | RR (%) | VR (%) | Causal VR (%) | Reliable RR (%) | Avg Features Changed |
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| **A** (No constraints) | 100.00 | 24.51 | 0.49 | 75.12 | 1.87 |
-| **B** (Immutability only) | 100.00 | 0.00 | 0.00 | 100.00 | 1.80 |
-| **C** (Full guardrails) | 72.55 | 0.00 | 12.16 | 63.73 | 2.03 |
+| Scenario | RR (%) | VR (%) | Causal VR (%) | Action VR (%) | Pathway Reliable RR (%) | Borrower Reliable RR (%) |
+|---|---|---|---|---|---|---|
+| A (No constraints) | 100.00 | 88.17 | 9.72 | 32.37 | 7.22 | 4.30 |
+| B (Immutability only) | 60.84 | 0.00 | 29.66 | 89.36 | 7.48 | 10.27 |
+| C (Full guardrails) | 10.71 | 0.00 | 42.71 | 0.00* | 57.29 | 8.87 |
 
-> VR is eliminated completely under Ω_imm in both datasets. The directional pattern (Scenario B > Scenario C in Reliable RR) is preserved across lending jurisdictions.
+\* Action VR = 0% by construction under Scenario C: the `permitted_range` parameter enforces the ±20% bound at the DiCE optimization stage.
 
-### Algorithm Robustness (Random vs KD-Tree)
+### Bootstrap Robustness — FICO HELOC (5 seeds, mean ± 95% CI)
 
-| Dataset | Scenario | Method | RR (%) | VR (%) | Reliable RR (%) | Avg Features Changed |
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| HELOC | A | Random | 100.00 | 94.11 | 5.22 | 2.77 |
-| HELOC | A | KD-Tree | 100.00 | **100.00** | **0.00** | **15.93** |
-| HELOC | C | Random | 11.05 | **0.00** | 5.87 | 1.99 |
-| HELOC | C | KD-Tree | **0.00** | — | **0.00** | — |
-| German Credit | A | Random | 100.00 | 24.51 | 75.12 | 1.87 |
-| German Credit | A | KD-Tree | 100.00 | **90.20** | **9.32** | **8.76** |
-| German Credit | C | Random | 72.55 | **0.00** | 63.73 | 2.03 |
-| German Credit | C | KD-Tree | **0.00** | — | **0.00** | — |
+| Metric | Scenario A | Scenario B | Scenario C |
+|---|---|---|---|
+| RR (%) | 100.00 [100.00, 100.00] | 47.58 [32.26, 62.91] | 10.56 [7.06, 14.06] |
+| VR (%) | 93.53 [89.63, 97.42] | 0.00 [0.00, 0.00] | 0.00 [0.00, 0.00] |
+| Causal VR (%) | 9.59 [7.46, 11.72] | 23.66 [15.56, 31.77] | 41.82 [38.94, 44.71] |
+| Action VR (%) | 29.48 [22.79, 36.18] | 81.65 [74.42, 88.87] | 0.00 [0.00, 0.00]* |
+| Pathway Reliable RR (%) | 4.09 [1.79, 6.38] | 13.98 [8.64, 19.33] | **58.18 [55.29, 61.06]** |
+| Borrower Reliable RR (%) | 4.74 [3.56, 5.92] | **11.01 [8.77, 13.25]** | 8.88 [5.86, 11.89] |
 
-> KD-Tree fails entirely under full guardrails in **both datasets**, confirming algorithm-independent constraint enforcement.
+### UCI German Credit — Transferability Validation (seed = 42)
 
-### Sensitivity Analysis (Threshold Variation, HELOC, Scenario C)
+| Scenario | RR (%) | VR (%) | Causal VR (%) | Action VR (%) | Pathway Reliable RR (%) |
+|---|---|---|---|---|---|
+| A (No constraints) | 100.00 | 21.61 | 0.00 | 35.17 | 50.82 |
+| B (Immutability only) | 100.00 | 0.00 | 0.85 | 43.64 | 55.88 |
+| C (Full guardrails) | 88.14 | 0.00 | 8.21 | 0.00* | 91.79 |
 
-| Threshold | RR (%) | VR (%) | Causal VR (%) | Reliable RR (%) | Avg Features Changed |
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| ±10% | 7.25 | 0.00 | 30.93 | 5.01 | 2.03 |
-| ±15% | 9.24 | 0.00 | 38.53 | 5.68 | 2.01 |
-| ±20% | 11.05 | 0.00 | 46.92 | 5.87 | 1.99 |
-| ±25% | 12.69 | 0.00 | 50.87 | 6.24 | 1.99 |
-| ±30% | 14.34 | 0.00 | 52.53 | 6.80 | 2.05 |
+**Core guardrail properties consistent across both datasets:**
+1. VR eliminated completely by Ω_imm (HELOC: 88.17%→0%; German: 21.61%→0%)
+2. Pathway Reliable RR highest under Scenario C in both datasets
 
-### Subgroup Analysis
+### Algorithm Sensitivity (FICO HELOC, seed = 42)
 
-**FICO HELOC** — by ExternalRiskEstimate Quartile
+| Scenario | Method | RR (%) | VR (%) | Pathway Reliable RR (%) |
+|---|---|---|---|---|
+| A | Random | 100.00 | 88.17 | 7.22 |
+| A | KD-Tree | 100.00 | 100.00 | 0.00 |
+| C | Random | 10.71 | 0.00 | 57.29 |
+| C | KD-Tree | 0.00 | — | 0.00 |
 
-| Quartile | N | Recourse Success | Reliable RR (%) | Avg Features Changed |
-|:---:|:---:|:---:|:---:|:---:|
-| Q1 (Low Score) | 293 | 2 | 0.34 | 1.62 |
-| Q2 | 323 | 8 | 0.93 | 1.97 |
-| Q3 | 288 | 44 | 7.10 | 2.02 |
-| Q4 (High Score) | 255 | 74 | 17.04 | 1.98 |
+KD-Tree fails entirely under Scenario C in both datasets, establishing Random search as the practically superior strategy in constrained financial environments.
 
-**UCI German Credit** — by Loan Duration Quartile
+### Subgroup Analysis — FICO HELOC (Scenario C, seed = 42)
 
-| Quartile | N | Recourse Success | Reliable RR (%) | Avg Features Changed |
-|:---:|:---:|:---:|:---:|:---:|
-| Q1 (Short, ≤18mo) | 16 | 14 | 81.25 | 1.93 |
-| Q2 (18–24mo) | 14 | 12 | 75.00 | 2.10 |
-| Q3 (24–36mo) | 14 | 9 | 50.00 | 2.14 |
-| Q4 (Long, >36mo) | 7 | 2 | 28.57 | 1.75 |
+| Quartile | N | Pathway Reliable RR (%) |
+|---|---|---|
+| Q1 (Lowest Score) | 293 | 0.34 |
+| Q2 | 323 | 0.93 |
+| Q3 | 288 | 7.10 |
+| Q4 (Highest Score) | 255 | 17.04 |
 
-> A consistent monotonic recourse accessibility gradient is replicated across both datasets (HELOC: 50-fold disparity; German Credit: 2.8-fold disparity).
+50-fold disparity (Q1: 0.34% vs. Q4: 17.04%) confirms that uniform ±20% thresholds encode structurally differential recourse access.
 
 ---
 
@@ -94,154 +86,171 @@ Primary experiments are conducted on the **FICO HELOC** dataset. Cross-dataset t
 ```
 ├── README.md
 ├── requirements.txt
-├── risk_guardrail_experiment.ipynb          # Primary experiment (FICO HELOC)
-├── german_credit_transferability.ipynb      # Transferability validation (UCI German Credit)
-├── heloc_dataset_v1.csv                     # FICO HELOC dataset (not included, see below)
-├── german.data-numeric                      # UCI German Credit dataset (not included, see below)
+├── heloc_bootstrap_v3.py               # Primary experiment (FICO HELOC) + Bootstrap
+├── german_bootstrap_v3.py              # Transferability validation (UCI German Credit) + Bootstrap
+├── heloc_dataset_v1.csv                # FICO HELOC dataset (not included, see below)
+├── german.data-numeric                 # UCI German Credit dataset (not included, see below)
 └── results/
-    ├── model_performance.csv
-    ├── hyperparameters.csv
     ├── scenario_comparison.csv
+    ├── bootstrap_raw.csv
+    ├── bootstrap_summary.csv
+    ├── bootstrap_calibration.csv
     ├── sensitivity_analysis.csv
     ├── subgroup_analysis.csv
     ├── method_comparison.csv
-    ├── case_analysis_tables_8_9_10.csv
-    ├── german_model_performance.csv
+    ├── model_performance.csv
+    ├── hyperparameters.csv
     ├── german_scenario_comparison.csv
+    ├── german_bootstrap_raw.csv
+    ├── german_bootstrap_summary.csv
+    ├── german_bootstrap_calibration.csv
     ├── german_sensitivity_analysis.csv
     ├── german_subgroup_analysis.csv
     ├── german_method_comparison.csv
+    ├── german_model_performance.csv
     └── german_transferability_comparison.csv
 ```
 
 ---
 
-## Getting Started
+## Datasets
 
-### Prerequisites
+### Primary: FICO HELOC
+- **Source**: [FICO Explainable ML Challenge](https://community.fico.com/s/explainable-machine-learning-challenge)
+- **Samples**: 10,459 | **Features**: 23 | **Target**: RiskPerformance (Binary)
+- Place `heloc_dataset_v1.csv` in the root directory.
+
+### Transferability Validation: UCI German Credit
+- **Source**: [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/144/statlog+german+credit+data)
+- **Samples**: 1,000 | **Features**: 24 | **Target**: Risk (1 = Good, 2 = Bad)
+- Place `german.data-numeric` in the root directory.
+
+> Neither dataset is included in this repository. Please download each from the sources above.
+
+---
+
+## Setup & Requirements
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### Datasets
+**Key dependencies:**
 
-**Primary: FICO HELOC**
-- **Source**: [FICO Explainable ML Challenge](https://community.fico.com/s/explainable-machine-learning-challenge)
-- **Samples**: 10,459 | **Features**: 23 | **Target**: RiskPerformance (Binary)
-- Place `heloc_dataset_v1.csv` in the root directory.
+| Package | Version |
+|---|---|
+| Python | 3.10 |
+| XGBoost | 1.7.5 |
+| DiCE-ML | 0.11 |
+| Optuna | 3.x |
+| scikit-learn | 1.x |
+| scipy | 1.x |
+| matplotlib | 3.x |
 
-**Transferability Validation: UCI German Credit**
-- **Source**: [UCI Machine Learning Repository](https://archive.ics.uci.edu/dataset/144/statlog+german+credit+data)
-- **Samples**: 1,000 | **Features**: 24 | **Target**: Risk (1 = Good, 2 = Bad)
-- Place `german.data-numeric` in the root directory.
+---
 
-> ⚠️ Neither dataset is included in this repository. Please download each from the sources above.
+## Running Experiments
 
-### Run Experiments
+### Primary Experiment (FICO HELOC)
 
-**Primary experiment (FICO HELOC):**
 ```bash
-jupyter notebook risk_guardrail_experiment.ipynb
+python heloc_bootstrap_v3.py
 ```
 
-**Transferability validation (UCI German Credit):**
+Executes in two parts:
+- **Part A** (100-sample validation): Verifies Action VR = 0% under Scenario C before full run
+- **Part B** (full experiment): All scenarios, bootstrap robustness, sensitivity analysis, subgroup analysis, algorithm comparison
+
+### Transferability Validation (UCI German Credit)
+
 ```bash
-jupyter notebook german_credit_transferability.ipynb
+python german_bootstrap_v3.py
 ```
 
-Or run as Python scripts:
-```bash
-jupyter nbconvert --to script risk_guardrail_experiment.ipynb
-python risk_guardrail_experiment.py
-
-jupyter nbconvert --to script german_credit_transferability.ipynb
-python german_credit_transferability.py
-```
+Same two-part structure as HELOC experiment.
 
 ---
 
 ## Experiment Pipeline
 
-### Primary Experiment (`risk_guardrail_experiment.ipynb`)
+### PART A — Validation (100 samples)
+Checks that Scenario C Action VR = 0% by construction before committing to full run.
 
+### PART B — Full Experiment
 ```
-Part 1: Data Loading & Preprocessing
-    └── HELOC dataset, special code handling (-7, -8, -9 → 0)
-
-Part 2: XGBoost Model Training
-    └── Optuna Bayesian Optimization (100 trials, 5-fold CV)
-
-Part 3: Guardrail Configuration
-    ├── Immutable features (Ω_imm): 6 features fixed
-    ├── Actionable features (Ω_act): 5 features with ±20% range
-    └── Causal constraints (Ω_cau): 2 domain-specific rules
-
-Part 4: Scenario Simulation
-    ├── Scenario A: No constraints (Vanilla DiCE)
-    ├── Scenario B: Immutability constraint only
-    └── Scenario C: Full guardrails (Ω_imm + Ω_cau + Ω_act)
-
-Part 5: Sensitivity Analysis
-    └── Threshold variation: ±10%, ±15%, ±20%, ±25%, ±30%
-
-Part 6: Subgroup Analysis
-    └── ExternalRiskEstimate quartiles (Q1–Q4)
-
-Part 7: Representative Case Extraction
-    └── Vanilla vs Proposed side-by-side comparison
-
-Part 8: Algorithm Robustness Validation
-    └── Random vs KD-Tree under Scenario A & C
-
-Part 9: Detailed Case Analysis
-    └── Incidental pass vs Engineered pass (Tables 8, 9, 10)
-
-Part 10A: Causal VR Paradox Analysis
-    └── Absolute count decomposition (denominator compression effect)
-
-Part 10B: Q1 vs Q4 Distribution Analysis
-    └── Mann-Whitney U, headroom coverage, approval gap asymmetry
-```
-
-### Transferability Validation (`german_credit_transferability.ipynb`)
-
-```
-Part 1: Data Loading & Preprocessing
-    └── german.data-numeric, column naming, target recode (1/2 → 1/0)
-
-Part 2: XGBoost Model Training
-    └── Optuna Bayesian Optimization (100 trials, 5-fold CV)
-
-Part 3: Feature Classification & Guardrail Configuration
-    ├── Immutable features (Ω_imm): 5 features (Age, Credit_History, etc.)
-    ├── Actionable features (Ω_act): 5 features (Duration, Savings_Account, etc.)
-    └── Causal constraints (Ω_cau): 2 domain-specific rules (European lending)
-
-Part 4: Scenario Simulation (A / B / C)
-Part 5: Sensitivity Analysis
-Part 6: Subgroup Analysis (Loan Duration Quartiles)
-Part 7: Representative Case Extraction
-Part 8: Algorithm Robustness Validation (Random vs KD-Tree)
-Part 9: Transferability Summary (HELOC vs German Credit comparison)
+B-1: Primary Scenario Simulation (A / B / C, seed 42, full test set)
+B-2: Sensitivity Analysis (threshold ±10% ~ ±30%, Scenario C)
+B-3: Subgroup Analysis (ExternalRiskEstimate quartiles Q1–Q4)
+B-4: Algorithm Robustness Validation (Random vs KD-Tree)
+B-5: Representative Case Extraction (incidental pass vs engineered pass)
+B-6: Bootstrap Robustness (5 seeds × 3 scenarios)
+B-7: Bootstrap Summary (Mean ± 95% CI, calibration metrics)
 ```
 
 ---
 
-## Environment
+## Variable Classification (FICO HELOC)
 
-| Item | Specification |
-|:---|:---|
-| Python | 3.10 |
-| XGBoost | 1.7.5 |
-| DiCE | 0.11 |
-| Optuna | 3.x |
-| scikit-learn | 1.x |
-| scipy | 1.x |
-| Random Seed | 42 |
+| Classification | Variables | Constraint |
+|---|---|---|
+| **Immutable** | ExternalRiskEstimate, MSinceOldestTradeOpen, AverageMInFile, MSinceMostRecentDelq, MSinceMostRecentInqexcl7days, NumBank2NatlTradesWHighUtilization | Fixed: x'_i = x_i (infinite penalty) |
+| **Actionable** | NetFractionRevolvingBurden, NumSatisfactoryTrades, NumTradesOpeninLast12M, PercentTradesNeverDelq, NumInqLast6M | ±20% limit, domain clipping [0,100%] |
+| **Logical** | PercentTradesNeverDelq ↔ NumTrades90Ever2DerogPubRec, NetFractionRevolvingBurden → NumSatisfactoryTrades | Domain-expert if-then rules (soft penalty) |
+
+---
+
+## Guardrail Constraint Design
+
+### Ω_imm: Immutability (Hard Constraint)
+Infinite penalty on any modification of immutable variables. Guarantees VR = 0%.
+
+### Ω_cau: Logical Consistency (Functional Constraint)
+Two domain-expert if-then rules:
+- **Rule 1**: `x'_Derog ≤ NumTotalTrades × (1 − x'_NeverDelq / 100)`
+- **Rule 2**: `if x'_Revolving < x_Revolving → x'_Satisfactory ≥ x_Satisfactory × 0.9`
+
+Implemented as soft penalty (not hard elimination).
+
+### Ω_act: Action Cost (Soft Constraint)
+Exponential penalty for changes exceeding ±20%. Under Scenario C, `permitted_range` enforces the bound at generation stage → Action VR = 0% by construction.
+
+---
+
+## Reproducibility
+
+| Item | Configuration |
+|---|---|
+| Primary seed | 42 |
+| Bootstrap seeds | {42, 123, 456, 789, 2024} |
+| Train/test split | 8:2 (stratified) |
+| Optuna trials | 100 (primary), 30 (bootstrap seeds 2–5) |
+| CV folds | 5-fold stratified |
+| CFs per sample | 4 |
+| Actionability threshold | ±20% |
+
+---
+
+## Output Files
+
+| File | Description |
+|---|---|
+| `scenario_comparison.csv` | Primary scenario A/B/C results (seed 42) |
+| `bootstrap_raw.csv` | Seed-level results (5 seeds × 3 scenarios) |
+| `bootstrap_summary.csv` | Mean ± 95% CI across seeds |
+| `bootstrap_calibration.csv` | Brier Score, ECE per seed |
+| `sensitivity_analysis.csv` | Threshold ±10%~±30% sensitivity |
+| `subgroup_analysis.csv` | Credit score quartile subgroup results |
+| `method_comparison.csv` | Random vs KD-Tree algorithm comparison |
+| `model_performance.csv` | XGBoost performance metrics |
+| `german_*` | Corresponding files for German Credit dataset |
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License
+
+---
+
+*This repository is prepared for double-blind peer review.
+Author information will be disclosed upon acceptance.*
