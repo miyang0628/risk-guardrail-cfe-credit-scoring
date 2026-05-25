@@ -1,0 +1,7 @@
+Dataset,Scenario,RR(%),VR(%),Causal_VR(%),Pathway_Reliable_RR(%)
+HELOC,Scenario_A,100.0,94.11,11.49,5.22
+HELOC,Scenario_B,36.87,0.0,28.22,26.47
+HELOC,Scenario_C,11.05,0.0,46.92,5.87
+German Credit,Scenario_A,100.0,21.61,0.0,50.82
+German Credit,Scenario_B,100.0,0.0,0.85,55.88
+German Credit,Scenario_C,88.14,0.0,8.21,91.79

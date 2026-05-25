@@ -1,0 +1,5 @@
+Subgroup,N,Avg_Duration(mo),Sample_Success,RR(%),Pathway_Reliable_RR(%),Borrower_Reliable_RR(%),Avg_Features_Changed
+Q1 (≤18mo),22,13.9,22,100.0,91.95,100.0,1.94
+Q2 (18–24mo),15,23.7,14,93.33,94.64,93.33,2.04
+Q3 (24–36mo),14,34.9,12,85.71,85.42,85.71,2.1
+Q4 (>36mo),8,48.0,4,50.0,100.0,50.0,1.94
