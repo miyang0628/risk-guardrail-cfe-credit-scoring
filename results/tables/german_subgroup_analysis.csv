@@ -1,0 +1,5 @@
+Subgroup,N,Avg_Duration(mo),Sample_Success,RR(%),Pathway_Reliable_RR(%),Borrower_Reliable_RR(%),Avg_Features_Changed
+Q1 (Short),16,14.62,14,87.5,96.3,87.5,2.04
+Q2,12,23.75,10,83.33,90.0,83.33,2.2
+Q3,14,34.29,9,64.29,77.78,64.29,2.19
+Q4 (Long),9,48.0,4,44.44,75.0,44.44,1.88

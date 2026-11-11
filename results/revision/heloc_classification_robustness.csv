@@ -1,0 +1,7 @@
+Variant,Scenario,RR,VR,Causal_VR,Action_VR,PRRR_product,BRRR
+baseline,Scenario_A,100.0,93.28,9.8,31.66,4.15,5.24
+baseline,Scenario_B,47.6,0.0,31.87,84.14,10.81,11.27
+baseline,Scenario_C,10.74,0.0,43.27,0.0,56.73,8.65
+alt_inquiries_immutable,Scenario_A,100.0,93.3,9.8,31.66,4.13,5.24
+alt_inquiries_immutable,Scenario_B,56.33,0.0,18.94,85.39,11.84,11.53
+alt_inquiries_immutable,Scenario_C,9.69,0.0,46.8,0.0,53.2,7.6

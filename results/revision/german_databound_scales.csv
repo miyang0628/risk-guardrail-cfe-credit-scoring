@@ -1,0 +1,6 @@
+Feature,IQR_approved,half_width_a0.5,median_value,pct20_halfwidth_at_median
+Duration,12.0,6.0,18.0,3.6
+Installment_Rate,2.0,1.0,3.0,0.6
+Existing_Credits,0.0,0.0,0.0,0.0
+Savings_Account,2.0,1.0,3.0,0.6
+Num_Dependents,0.0,0.0,1.0,0.2

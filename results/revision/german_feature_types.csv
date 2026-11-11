@@ -1,0 +1,6 @@
+Feature,N_unique,Min,Max,Type,Pct_rule_binds
+Duration,33,4.0,72.0,continuous,yes
+Installment_Rate,4,1.0,4.0,binary/near-categorical,yes
+Existing_Credits,2,0.0,1.0,binary/near-categorical,no (zero/near-zero -> +/-0.5 fallback)
+Savings_Account,5,1.0,5.0,binary/near-categorical,yes
+Num_Dependents,2,0.0,1.0,binary/near-categorical,no (zero/near-zero -> +/-0.5 fallback)

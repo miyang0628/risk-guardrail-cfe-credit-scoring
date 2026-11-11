@@ -1,7 +1,26 @@
-pandas>=1.5.0
+# ---------------------------------------------------------------------------
+# Figure/table rebuild (RUN_EXPERIMENT = False) -- lightweight
+# ---------------------------------------------------------------------------
 numpy>=1.23.0
-xgboost>=1.7.0
-dice-ml>=0.11
-optuna>=3.0.0
+pandas>=1.5.0
+scipy>=1.9.0
 scikit-learn>=1.2.0
+matplotlib>=3.6.0
+seaborn>=0.12.0
+
+# ---------------------------------------------------------------------------
+# Full experiment (RUN_EXPERIMENT = True) -- versions PINNED for reproducibility.
+# The counterfactual results depend on these exact versions: newer dice-ml
+# (>=0.12) changes the random-search behaviour and yields no counterfactuals,
+# and xgboost 2.x drops `use_label_encoder` and alters the fitted model.
+# ---------------------------------------------------------------------------
+xgboost==1.7.6
+dice-ml==0.11
+optuna>=3.0.0
 tqdm>=4.64.0
+
+# ---------------------------------------------------------------------------
+# Notebook execution
+# ---------------------------------------------------------------------------
+jupyter>=1.0.0
+nbconvert>=7.0.0

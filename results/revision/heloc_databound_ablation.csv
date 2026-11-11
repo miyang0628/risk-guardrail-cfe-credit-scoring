@@ -1,0 +1,5 @@
+Method,RR,Causal_VR,PRRR_joint,BRRR
+fixed +/-20% (paper),10.74,43.27,56.73,8.65
+data-IQR (alpha=0.25),5.5,1.63,98.37,5.41
+data-IQR (alpha=0.5),10.66,4.67,95.33,10.48
+data-IQR (alpha=1.0),17.9,13.14,86.86,16.86

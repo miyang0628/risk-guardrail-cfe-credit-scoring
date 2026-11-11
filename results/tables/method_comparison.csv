@@ -1,0 +1,5 @@
+Scenario,Method,N,RR(%),VR(%),Causal_VR(%),Action_VR(%),Pathway_Reliable_RR(%),Borrower_Reliable_RR(%),Avg_Features_Changed,Errors
+Scenario_A,random,1145,100.0,93.28,9.8,31.66,1.88,5.24,2.06,0
+Scenario_C,random,1145,10.74,0.0,43.27,0.0,56.73,8.65,2.04,1022
+Scenario_A,kdtree,1145,100.0,100.0,19.48,98.97,0.0,0.0,16.0,0
+Scenario_C,kdtree,1145,0.0,0.0,0.0,0.0,0.0,0.0,0.0,1145

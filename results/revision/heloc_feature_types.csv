@@ -1,0 +1,6 @@
+Feature,N_unique,Min,Max,Type,Pct_rule_binds
+NetFractionRevolvingBurden,126,0.0,232.0,continuous,no (zero/near-zero -> +/-0.5 fallback)
+NumSatisfactoryTrades,73,0.0,79.0,continuous,no (zero/near-zero -> +/-0.5 fallback)
+NumTradesOpeninLast12M,18,0.0,19.0,continuous,no (zero/near-zero -> +/-0.5 fallback)
+PercentTradesNeverDelq,71,0.0,100.0,continuous,no (zero/near-zero -> +/-0.5 fallback)
+NumInqLast6M,26,0.0,66.0,continuous,no (zero/near-zero -> +/-0.5 fallback)

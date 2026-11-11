@@ -1,0 +1,6 @@
+Feature,IQR_approved,half_width_a0.5,median_value,pct20_halfwidth_at_median
+NetFractionRevolvingBurden,33.0,16.5,25.0,5.0
+NumSatisfactoryTrades,15.0,7.5,19.0,3.8
+NumTradesOpeninLast12M,2.0,1.0,1.0,0.2
+PercentTradesNeverDelq,7.0,3.5,96.0,19.2
+NumInqLast6M,2.0,1.0,1.0,0.2
